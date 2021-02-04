@@ -1,12 +1,8 @@
 import React from "react";
 import { useRouter } from "next/router";
 import Link from "next/link";
-import { server } from "../../../config";
 
 const article = ({ article }) => {
-  // const { id } = useRouter().query;
-  console.log(article);
-
   return (
     <div>
       <h5>{article.title}</h5>
@@ -20,7 +16,10 @@ const article = ({ article }) => {
 };
 
 export const getStaticProps = async (context) => {
-  const res = await fetch(`${server}/api/article/${context.params.id}`);
+  // const { protocol, origin } = absoluteUrl(req, req.headers.host);
+  const origin = process.env.baseUrl;
+
+  const res = await fetch(`${origin}/api/article/${context.params.id}`);
   const article = await res.json();
   console.log("response", article);
 
@@ -32,7 +31,9 @@ export const getStaticProps = async (context) => {
 };
 
 export const getStaticPaths = async () => {
-  const res = await fetch(`${server}/api/article`);
+  // const { protocol, origin } = absoluteUrl(req, req.headers.host);
+  const origin = process.env.baseUrl;
+  const res = await fetch(`${origin}/api/article`);
   const articles = await res.json();
   const ids = articles.map((article) => article.id);
   const paths = ids.map((id) => ({ params: { id: id.toString() } }));
