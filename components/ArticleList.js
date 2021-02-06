@@ -2,11 +2,11 @@ import React from "react";
 import articleListStyle from "../styles/ArticleList.module.css";
 import ArticleItems from "./ArticleItems";
 
-const ArticleList = ({ posts }) => {
+const ArticleList = ({ articles }) => {
   return (
     <div className={articleListStyle.grid}>
-      {posts.map((post) => (
-        <ArticleItems article={post} />
+      {articles.map((article) => (
+        <ArticleItems article={article} />
       ))}
     </div>
   );

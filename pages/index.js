@@ -1,9 +1,15 @@
 import Head from "next/head";
 import ArticleList from "../components/ArticleList";
 import styles from "../styles/layout.module.css";
+import useSWR from "swr";
 
-export default function Home({ posts }) {
-  console.log(posts);
+const fetcher = (url) => fetch(url).then((res) => res.json());
+
+export default function Home() {
+  const { data, error } = useSWR("/api/article", fetcher);
+  if (error) return <div>Data Loading Failed</div>;
+  if (!data) return <div>Data Loading....</div>;
+
   return (
     <div className={styles.container}>
       <Head>
@@ -13,20 +19,16 @@ export default function Home({ posts }) {
 
       <h1>Hello welcome to next js app</h1>
 
-      <ArticleList posts={posts} />
+      <ArticleList articles={data} />
     </div>
   );
 }
 
-export const getStaticProps = async () => {
-  const origin = process.env.baseUrl;
-
-  const res = await fetch(`${origin}/api/article`);
-  const data = await res.json();
-
-  return {
-    props: {
-      posts: data,
-    },
-  };
-};
+// export const getStaticProps = async () => {
+//   const articles = await fetcher(`/api/article`);
+//   return {
+//     props: {
+//       articles,
+//     },
+//   };
+// };
